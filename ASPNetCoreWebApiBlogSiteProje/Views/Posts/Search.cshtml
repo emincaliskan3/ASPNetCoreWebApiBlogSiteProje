@@ -1,0 +1,12 @@
+﻿@model IEnumerable<Post>
+@{
+    ViewData["Title"] = Context.Request.Query["q"] + "Arama Sonuçları";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="row row-cols-3">
+
+    <partial name="_PartialPostView">
+
+</div>

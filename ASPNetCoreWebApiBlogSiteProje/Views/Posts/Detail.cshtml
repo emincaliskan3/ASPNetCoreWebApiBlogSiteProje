@@ -1,0 +1,30 @@
+﻿@model Post
+
+@{
+    ViewBag.Title = Model.Name;
+}
+
+<h2 class="haberdetaybaslik">@Model.Name</h2>
+
+<div class="clearfix">
+
+    <div class="float-start me-3">
+        <img src="/Images/@Model.Image" alt="" height="333" />
+    </div>
+    <div>
+        <dl class="dl-horizontal">
+            
+
+            
+
+            <dd class="detayhaber">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+
+
+
+        </dl>
+    </div>
+
+</div>
+<link href="~/css/site.css" rel="stylesheet" />

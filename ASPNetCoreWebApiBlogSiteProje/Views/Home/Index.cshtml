@@ -1,0 +1,90 @@
+﻿@model HomePageViewModel
+@{
+    ViewBag.Title = "Anasayfa";
+}
+
+<div class="p-4 p-md-3 mb-4 rounded text-body-emphasis paragraf-arka">
+    <div class="col-lg-12 px-0">
+        <h1 class="display-4 fst-italic paragraf-baslık">"Teknolojinin Evrimi: Geleceğe Yolculukta İzlenimler"</h1>
+        <p class="lead my-3">
+            Teknolojinin hızla değişen dünyamızı nasıl etkilediğini ve gelecekte neleri bekleyebileceğimizi keşfedin.
+            <a class="btn btn-outline-light tumhaberler-buton " href="/Posts/Index">Tüm Haberler İçin</a>
+        </p>
+
+
+
+    </div>
+</div>
+
+<div class="album py-5 bg-body-tertiary ">
+    <div class="container ">
+        <div class="text-center">
+
+            <h2 class="baslık">Güncel Haberler </h2>
+
+        </div>
+        <div class="owl-carousel">
+
+            <partial name="_PartialPostView" model="Model.Posts">
+
+        </div>
+    </div>
+</div>
+
+
+<div class="container px-4 py-5" id="custom-cards">
+    <h2 class="pb-2 border-bottom baslık">Kategoriler</h2>
+
+    <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+        @foreach (var item in Model.Categories)
+        {
+
+            <div class="col">
+                <div class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg" style="background-image: url('/Images/@item.Image');">
+                    <div class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1">
+                        <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold">
+                            @item.Name
+
+                        </h3>
+
+                    </div>
+                </div>
+
+            </div>
+
+
+
+        }
+
+    </div>
+
+</div>
+
+
+
+
+
+
+@section style {
+    <link href="/css/owl.carousel.min.css" rel="stylesheet" />
+    <link href="/css/owl.theme.default.min.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+
+}
+@section scripts {
+    <script src="/js/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var owl = $('.owl-carousel');
+            owl.owlCarousel({
+                items: 5,
+                loop: true,
+                margin: 10,
+                autoplay: true,
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true,
+                nav: true
+            });
+        });</script>
+
+}
