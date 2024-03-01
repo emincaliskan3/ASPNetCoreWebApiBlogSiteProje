@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("default", policy =>
     {
-        policy.WithOrigins("https://localhost:7106").AllowAnyHeader().AllowAnyMethod(); // apiye istek atma iznine sahip domainler
+        policy.WithOrigins("https://localhost:7132").AllowAnyHeader().AllowAnyMethod(); // apiye istek atma iznine sahip domainler
     });
 });
 

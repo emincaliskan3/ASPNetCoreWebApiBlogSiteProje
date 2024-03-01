@@ -2,12 +2,13 @@
     ViewData["Title"] = "Javascript ile Kategori CRUD İşlemleri";
 }
 
-<h1>Javascript ile Kategori CRUD İşlemleri</h1>
+<h1>Javascript ile İçerik CRUD İşlemleri</h1>
 
-<table id="Kategoriler" class="table table-striped table-hover">
+<table id="Icerikler" class="table table-striped table-hover">
     <tr>
         <th>Id</th>
         <th>Kategori Adı</th>
+        <th>Başlık </th>
         <th>Resim</th>
         <th>Durum</th>
         <th>Anasayfa</th>
@@ -17,6 +18,7 @@
 </table>
 
 <input type="hidden" id="Id" />
+<input type="hidden" id="CategoryId" />
 <input type="hidden" id="ImageName" />
 
 <hr />
@@ -25,6 +27,12 @@
 
     <tr>
         <td>Kategori Adı</td>
+        <td>
+            <input type="text" value="" id="CategoryId" name="CategoryId" class="form-control" />
+        </td>
+    </tr>
+    <tr>
+        <td>Başlık</td>
         <td>
             <input type="text" value="" id="Name" name="Name" class="form-control" />
         </td>
@@ -75,70 +83,73 @@
     <script>
         function GetAll() {
 
-            fetch("https://localhost:7106/api/categories/") // fetch metodunu bu şekilde istek atacağımız sunucuyu parametre vererek kullanıyoruz
-                .then(response => response.json()) // bu satır apiden dönen sonucu json a dönüştürür
+            fetch("https://localhost:7106/api/posts/")
+                .then(response => response.json()) 
                 .then(data => {
-                    // console.log(data) // api den dönen nesneyi tarayıcı konsoluna bastır
-                    console.log(data) // api den dönen ürün listesini tarayıcı konsoluna bastır
-                    let div = document.getElementById("list") // ekrandaki products id li elementi seç
-                    data.forEach(p => { // gelen data içindeki products listesinde forEach ile dön
-                        // listedeki her bir ürünü
-                        div.innerHTML += `<tr>
-                                            <td>${p.id}</td>
-                                            <td> ${p.name} </td>
-                                            <td><img src="https://localhost:7106/Images/${p.image}" alt="" height="34" /></td>
-                                            <td> ${p.isActive} </td>
-                                            <td> ${p.isHome} </td>
-                                            <td>
-                          <input type="button" name="edit" value="Düzenle" class="btn btn-primary" onclick="Edit(${p.id})" />
-                          <input type="button" name="delete" value="Sil" class="btn btn-danger" onclick="Delete(${p.id})" />
-                                            </td>
-                                                      </tr>` // yatay tırnak klavyeden ctrl+ alt + , e basarak açılıyor
+                    
+                    console.log(data) 
+                    let div = document.getElementById("list") 
+                    data.forEach(p => { 
 
-                    })/* */
+                        div.innerHTML += `<tr>
+                                                    <td>${p.id}</td>
+                                                                    <td> ${p.categoryId} </td>
+                                                    <td> ${p.name} </td>
+                                                    <td><img src="https://localhost:7106/Images/${p.image}" alt="" height="34" /></td>
+                                                    <td> ${p.isActive} </td>
+                                                    <td> ${p.isHome} </td>
+                                                    <td>
+                                  <input type="button" name="edit" value="Düzenle" class="btn btn-primary" onclick="Edit(${p.id})" />
+                                  <input type="button" name="delete" value="Sil" class="btn btn-danger" onclick="Delete(${p.id})" />
+                                                    </td>
+                                                              </tr>`
+
+                    })
                 })
                 .catch(error => {
-                    // eğer api isteğinde hata oluşmazsa buraya yakalayıp kullanabiliriz
+                    
                     console.warn(error)
                     alert(error + "Hatası Oluştu!")
-                    // veya burada db de logs tablosu yapıp kaydedebiliriz.
+                    
                 })
         }
         GetAll();
         function Add() {
-            fetch("https://localhost:7106/api/categories/", {
+            fetch("https://localhost:7106/api/posts/", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
+                    CategoryId: document.getElementById("CategoryId").value,
                     Name: document.getElementById("Name").value,
                     Descripton: document.getElementById("Description").value,
                     Image: document.getElementById("Image").value,
                     IsActive: document.getElementById("IsActive").checked,
                     IsHome: document.getElementById("IsHome").checked
-                }) // body bitiş
+                }) 
 
-            }) // fetch bitiş
+            }) 
                 .then((response) => {
-                    if (response.ok) { // eğer işlem sonucu başarılıysa sunucudan ok cevabı geliyor
-                        location.reload();  // sayfayı yenile
+                    if (response.ok) { 
+                        location.reload();  
 
                     }
                     else {
-                        throw new Error("İşlem Başarısız Oldu!") // hata fırlat
+                        throw new Error("İşlem Başarısız Oldu!") 
                     }
-                }) // then bitiş
+                }) 
                 .catch(error => {
                     console.error("Hata Oluştu!", error)
                     alert("Hata Oluştu!")
                 })
         }
         function Edit(id) {
-            fetch("https://localhost:7106/api/categories/" + id)
+            fetch("https://localhost:7106/api/posts/" + id)
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    // bize gelen 1 tane datayı inputlara dolduruyoruz
+                   
                     document.getElementById("Id").value = data.id
+                    document.getElementById("CategoryId").value = data.categoryId
                     document.getElementById("Name").value = data.name
                     document.getElementById("Description").value = data.description
                     document.getElementById("ImageName").value = data.image
@@ -150,28 +161,29 @@
         }
         function Update() {
             var id = document.getElementById("Id").value
-            fetch("https://localhost:7106/api/categories/" + id, {
+            fetch("https://localhost:7106/api/posts/" + id, {
                 method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
                     Id: id,
+                    CategoryId: document.getElementById("CategoryId").value,
                     Name: document.getElementById("Name").value,
                     Descripton: document.getElementById("Description").value,
                     Image: document.getElementById("Image").value,
                     IsActive: document.getElementById("IsActive").checked,
                     IsHome: document.getElementById("IsHome").checked
-                }) // body bitiş
+                }) 
 
-            }) // fetch bitiş
+            }) 
                 .then((response) => {
-                    if (response.ok) { // eğer işlem sonucu başarılıysa sunucudan ok cevabı geliyor
-                        location.reload();  // sayfayı yenile
+                    if (response.ok) { 
+                        location.reload();  
 
                     }
                     else {
-                        throw new Error("İşlem Başarısız Oldu!") // hata fırlat
+                        throw new Error("İşlem Başarısız Oldu!") 
                     }
-                }) // then bitiş
+                }) 
                 .catch(error => {
                     console.error("Hata Oluştu!", error)
                     alert("Hata Oluştu!")
@@ -179,20 +191,20 @@
         }
         function Delete(id) {
 
-            fetch("https://localhost:7106/api/categories/" + id, {
+            fetch("https://localhost:7106/api/posts/" + id, {
                 method: "DELETE",
                 headers: { "Content-Type": "application/json" }
 
-            }) // fetch bitiş
+            }) 
                 .then((response) => {
-                    if (response.ok) { // eğer işlem sonucu başarılıysa sunucudan ok cevabı geliyor
-                        location.reload();  // sayfayı yenile
+                    if (response.ok) { 
+                        location.reload();  
 
                     }
                     else {
-                        throw new Error("İşlem Başarısız Oldu!") // hata fırlat
+                        throw new Error("İşlem Başarısız Oldu!") 
                     }
-                }) // then bitiş
+                }) 
                 .catch(error => {
                     console.error("Hata Oluştu!", error)
                     alert("Hata Oluştu!")
